@@ -1,0 +1,32 @@
+Nội dung chính:
+
+Quản lý vai trò & phân quyền - Chi tiết thao tác của từng vai trò (Admin, Cleaning, Maintenance, Laundry, Lawn/Pool staff)
+8 Module chức năng chi tiết:
+
+Cleaning Schedule Management
+To-Do Management
+Communication & Incident Handling
+Image Upload & Quality Assurance
+Maintenance Schedule Management
+Supplies Inventory Management
+Laundry Management
+Lawn & Pool Care Management
+
+
+Reporting & Oversight - Các loại báo cáo và xuất dữ liệu
+Notifications & Alerts - Hệ thống thông báo đa dạng
+Acceptance Criteria - Tiêu chí nghiệm thu MVP
+Technical Notes - Ghi chú kỹ thuật
+Luồng nghiệp vụ tổng hợp - End-to-end workflows thực tế
+Tính năng nâng cao - Analytics, AI, Gamification, etc.
+Bảo mật & quyền riêng tư
+Kết luận & khuyến nghị - Metrics, phases, training
+
+Mỗi phần đều có:
+
+✅ Mô tả chi tiết quy trình
+📝 Các bước thực hiện cụ thể
+🔔 Notifications liên quan
+⚠️ Các trường hợp ngoại lệ
+📸 Yêu cầu proof of work
+🎯 Expected results

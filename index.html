@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AriStay — Workflows (English)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh;padding:20px;color:#222;
+    }
+    .container{max-width:1600px;margin:0 auto}
+    .header{
+      background:#fff;border-radius:14px;padding:24px;text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);margin-bottom:16px
+    }
+    .header h1{color:#4c5fe3;font-size:2.2rem;margin-bottom:6px}
+    .header p{color:#555}
+    .tabs{
+      display:flex;flex-wrap:wrap;gap:10px;background:#fff;padding:14px;border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);margin-bottom:18px
+    }
+    .tab-button{
+      padding:10px 18px;border:none;border-radius:8px;background:#f1f3f5;color:#3d3d3d;
+      font-weight:600;cursor:pointer;transition:all .2s ease;font-size:.95rem
+    }
+    .tab-button:hover{background:#e9ecef;transform:translateY(-1px)}
+    .tab-button.active{
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color:#fff;box-shadow:0 5px 15px rgba(102,126,234,.35)
+    }
+    .flowchart-container{
+      background:#fff;border-radius:14px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.18);
+      display:none;overflow-x:auto
+    }
+    .flowchart-container.active{display:block;animation:fadeIn .35s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .flowchart-title{
+      font-size:1.6rem;color:#2b2f33;margin-bottom:14px;padding-bottom:10px;border-bottom:3px solid #667eea
+    }
+    .mermaid{max-width:100%}
+    pre.error-box{background:#fff0f0;color:#a00;padding:12px;border:1px solid #faa;border-radius:8px;white-space:pre-wrap}
+    @media (max-width:768px){
+      .header h1{font-size:1.6rem}
+      .tab-button{font-size:.85rem;padding:8px 14px}
+    }
+  
+    .flow-toolbar{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+    .btn{padding:8px 12px;border:none;border-radius:8px;background:#eef0f3;color:#333;font-weight:600;cursor:pointer}
+    .btn:hover{background:#e6e9ed}
+    .btn.primary{background:#4c5fe3;color:#fff}
+    .btn.primary:hover{filter:brightness(0.95)}
+    .details{display:none;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin-top:10px}
+    .details h3{margin:8px 0 8px;font-size:1.05rem;color:#1f2937}
+    .details ul{margin-left:18px;line-height:1.5}
+    .details p{margin:6px 0 10px;color:#374151}
+
+
+    .flow-toolbar .btn.primary::before{content:' ';}
+    .flow-toolbar{margin-top:6px}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>ARISTAY APP</h1>
+      <p>Detailed Business Workflows (English only)</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-button active" onclick="showFlowchart('cleaning', event)">🧹 Cleaning</button>
+      <button class="tab-button" onclick="showFlowchart('maintenance', event)">🔧 Maintenance</button>
+      <button class="tab-button" onclick="showFlowchart('inventory', event)">📦 Inventory</button>
+      <button class="tab-button" onclick="showFlowchart('laundry', event)">👕 Laundry</button>
+      <button class="tab-button" onclick="showFlowchart('lawnpool', event)">🌿 Lawn / Pool</button>
+      <button class="tab-button" onclick="showFlowchart('incident', event)">🚨 Incident</button>
+      <button class="tab-button" onclick="showFlowchart('qa', event)">✅ Admin Quality Check</button>
+      <button class="tab-button" onclick="showFlowchart('reporting', event)">📊 Reporting</button>
+      <button class="tab-button" onclick="showFlowchart('calendar', event)">📅 Calendar & Status</button>
+      <button class="tab-button" onclick="showFlowchart('chat', event)">💬 Chat</button>
+      <button class="tab-button" onclick="showFlowchart('roles', event)">🔐 Roles & Permissions</button>
+    </div>
+
+    <!-- Cleaning Workflow -->
+    <div id="cleaning" class="flowchart-container active">
+      <h2 class="flowchart-title">🧹 Cleaning Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('cleaning')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-cleaning" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Ensure property is cleaned and verified between stays with traceable evidence.</p>
+<h3>👥 Actors</h3>
+<ul><li>Cleaning Staff</li><li>Admin/Manager</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Guest check-out</li><li>Imported schedule</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>System creates task → staff receives notification → GPS check-in → BEFORE photos → complete room-by-room checklist → AFTER photos → GPS check-out → submit.</li>
+<li>Admin reviews photos; if OK, task is approved and property status becomes <em>Ready</em>.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul>
+<li>Overdue start → admin is alerted.</li>
+<li>Damage/shortage/lost&found found → system auto-creates Maintenance/Inventory/Lost&Found records.</li>
+<li>Insufficient photos or incomplete checklist → cannot submit.</li>
+</ul>
+<h3>🗃️ Data Captured</h3>
+<ul>
+<li>Timestamps, GPS coordinates (check-in/out)</li>
+<li>Checklist completion %, photos (before/after)</li>
+<li>Issues reported (type, notes)</li>
+</ul>
+<h3>📈 KPIs</h3>
+<ul><li>Turnover time</li><li>Photo compliance</li><li>On-time start</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Guest Check-out]) --> AdminCheck{Schedule imported?}
+    AdminCheck -->|No| AdminImport[Admin imports schedule CSV]
+    AdminCheck -->|Yes| TaskGen
+    AdminImport --> TaskGen[System auto-creates cleaning tasks]
+
+    TaskGen --> AssignStaff[Assign to Cleaning Staff]
+    AssignStaff --> SendNotif[Send push notification]
+
+    SendNotif --> StaffView[Staff opens To-Do list]
+    StaffView --> Remind1[24h reminder]
+    StaffView --> Remind2[2h reminder]
+
+    Remind2 --> StaffStart{Start now?}
+    StaffStart -->|No| Overdue[Overdue alert]
+    Overdue --> AdminContact[Admin contacts staff]
+
+    StaffStart -->|Yes| GPSCheckIn[GPS Check-in]
+    GPSCheckIn --> VerifyLocation{Correct location?}
+    VerifyLocation -->|No| LocationError[GPS error]
+    LocationError --> GPSCheckIn
+
+    VerifyLocation -->|Yes| PhotoBefore[Take BEFORE photos]
+    PhotoBefore --> ValidateBefore{Enough photos?}
+    ValidateBefore -->|No| PhotoBefore
+
+    ValidateBefore -->|Yes| StartClean[Start cleaning]
+    StartClean --> CheckLiving[Checklist: Living Room]
+    CheckLiving --> CheckKitchen[Checklist: Kitchen]
+    CheckKitchen --> CheckBedroom[Checklist: Bedroom]
+    CheckBedroom --> CheckBathroom[Checklist: Bathroom]
+
+    CheckBathroom --> IssueFound{Any issue?}
+
+    IssueFound -->|Damage| ReportDamage[Report damage]
+    ReportDamage --> CreateMaintTask[Auto-create Maintenance task]
+    CreateMaintTask --> PhotoAfter
+
+    IssueFound -->|Shortage| ReportShortage[Report shortage]
+    ReportShortage --> CreateInvTask[Auto-create Inventory task]
+    CreateInvTask --> PhotoAfter
+
+    IssueFound -->|Lost and found| LogLostFound[Log Lost and Found]
+    LogLostFound --> PhotoAfter
+
+    IssueFound -->|No| PhotoAfter[Take AFTER photos]
+
+    PhotoAfter --> ValidateAfter{Enough photos?}
+    ValidateAfter -->|No| PhotoAfter
+
+    ValidateAfter -->|Yes| ChecklistComplete{Checklist 100%?}
+    ChecklistComplete -->|No| IncompleteError[Cannot submit]
+    IncompleteError --> StartClean
+
+    ChecklistComplete -->|Yes| GPSCheckOut[GPS Check-out]
+    GPSCheckOut --> SubmitTask[Submit task]
+
+    SubmitTask --> AdminNotify[Notify Admin]
+    AdminNotify --> AdminReview[Admin reviews photos]
+
+    AdminReview --> AdminCheckPhotos{Photos OK?}
+
+    AdminCheckPhotos -->|No| AlertStaff[Request rework]
+    AlertStaff --> StaffDecision{Staff response}
+    StaffDecision -->|Re-clean| BackToClean[Return to cleaning]
+    BackToClean --> PhotoAfter
+
+    StaffDecision -->|Explain| ExplainIssue[Provide explanation]
+    ExplainIssue --> AdminReview
+
+    AdminCheckPhotos -->|Yes| AdminApprove{Approve?}
+
+    AdminApprove -->|No| RequestRework[Request rework]
+    RequestRework --> StaffView
+
+    AdminApprove -->|Yes| TaskComplete[Task Completed Verified]
+    TaskComplete --> UpdateProperty[Property status: Ready]
+    UpdateProperty --> GenReport[Auto-generate report]
+    GenReport --> End([Complete])
+
+    style Start fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+    style AdminReview fill:#4dabf7,stroke:#1971c2,stroke-width:2px
+    style TaskComplete fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style End fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+      </div>
+    </div>
+
+    <!-- Maintenance Workflow -->
+    <div id="maintenance" class="flowchart-container">
+      <h2 class="flowchart-title">🔧 Maintenance Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('maintenance')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-maintenance" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Plan, execute, and verify repair tasks originating from cleaning, schedule, or manual creation.</p>
+<h3>👥 Actors</h3>
+<ul><li>Maintenance Staff</li><li>Admin/Manager</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Damage from cleaning</li><li>Preventive maintenance schedule</li><li>Manual task</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>Task assigned/claimed → staff prepares tools → GPS check-in → BEFORE photos → perform work → test → AFTER photos → submit.</li>
+<li>Admin reviews; if approved, status updated and history recorded.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul>
+<li>Missing tools/parts → task <em>BLOCKED</em> until parts arrive.</li>
+<li>Failed testing → troubleshooting; escalate for support if needed.</li>
+<li>Rework requested by admin.</li>
+</ul>
+<h3>🗃️ Data Captured</h3>
+<ul>
+<li>Work notes, parts used, photos (before/after)</li>
+<li>Test results, GPS times</li>
+</ul>
+<h3>📈 KPIs</h3>
+<ul><li>Resolution time</li><li>First-time fix rate</li><li>Parts cost per task</li></ul>
+</div>
+    
+      <div class="mermaid">
+
+flowchart TD
+    A([Start]) --> B{Task source?}
+    B --> C1[Admin creates task]
+    B --> C2[Auto-created from cleaning]
+    B --> C3[Scheduled auto task]
+
+    C1 --> D[Set priority and category]
+    C2 --> D
+    C3 --> D
+
+    D --> E{Assignment method?}
+    E --> F[Direct assign]
+    E --> G[Open to claim]
+
+    F --> H[Notify staff]
+    G --> I[View open tasks]
+    I --> J[Claim task]
+    J --> K[Notify admin]
+
+    H --> L[View task details]
+    K --> L
+
+    L --> M1[24h reminder]
+    L --> M2[2h reminder]
+
+    M2 --> N{Ready to start?}
+    N --> O1[Check overdue]
+    O1 --> P[Overdue alert]
+    P --> Q[Admin reassigns or escalates]
+    N --> O2[Check tools]
+
+    O2 --> R1[Request parts]
+    R1 --> S[Blocked]
+    S --> T[Wait for parts]
+    T --> O2
+
+    O2 --> R2[GPS check-in]
+    R2 --> U[Photo BEFORE]
+    U --> V[Start repair]
+    V --> W[Work in progress]
+    W --> X{Test result?}
+    X --> Y1[Troubleshoot]
+    Y1 --> Z{Need help?}
+    Z --> AA[Contact admin]
+    AA --> AB[Admin support]
+    AB --> W
+    Z --> W
+    X --> Y2[Photo AFTER]
+
+    Y2 --> AC[Add notes]
+    AC --> AD[Record used parts]
+    AD --> AE[GPS check-out]
+    AE --> AF[Submit task]
+
+    AF --> AG[Admin review]
+    AG --> AH{Approved?}
+    AH --> AI[Request rework]
+    AI --> L
+    AH --> AJ[Task verified]
+
+    AJ --> AK[Update property status]
+    AK --> AL[Add to maintenance history]
+    AL --> AM{Recurring?}
+    AM --> AN[Schedule next]
+    AM --> AO[Generate report]
+    AN --> AO
+    AO --> AP([Complete])
+
+    style A fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+    style AJ fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style AP fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+
+</div>
+    </div>
+
+    <!-- Inventory Workflow -->
+    <div id="inventory" class="flowchart-container">
+      <h2 class="flowchart-title">📦 Inventory Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('inventory')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-inventory" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Restore and maintain par levels of supplies across properties with accountability.</p>
+<h3>👥 Actors</h3>
+<ul><li>Maintenance/Inventory Staff</li><li>Admin</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Cleaning shortage report</li><li>Low-stock alert</li><li>Scheduled cycle count</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>Create task → verify needs → source supplies (stock/purchase) → GPS check-in → restock with item-by-item logging and photos → GPS check-out → submit → verify.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul>
+<li>Budget not approved → report blocked restock.</li>
+<li>Post-restock still below par → raise alert.</li>
+</ul>
+<h3>🗃️ Data Captured</h3>
+<ul><li>Transactions (stock-in/out)</li><li>Photos (before/item/after)</li><li>Costs</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>Days below par</li><li>Restock lead time</li><li>Shrinkage</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Start]) --> Trigger{Trigger event?}
+    Trigger -->|Cleaning shortage| CleanReport[Cleaning staff reports shortage]
+    Trigger -->|Low stock alert| AutoAlert[System detects low stock]
+    Trigger -->|Scheduled check| ScheduledCheck[Scheduled inventory check]
+
+    CleanReport --> CreateTask[Auto-create Inventory task]
+    AutoAlert --> CreateTask
+    ScheduledCheck --> CreateTask
+
+    CreateTask --> SetPriority{Urgency?}
+    SetPriority -->|Guest checking in soon| HighPriority[Priority: HIGH]
+    SetPriority -->|Normal| MedPriority[Priority: MEDIUM]
+
+    HighPriority --> AssignMaint[Assign to Maintenance Staff]
+    MedPriority --> AssignMaint
+    AssignMaint --> NotifyStaff[Notify staff]
+    NotifyStaff --> StaffView[Staff views task details]
+
+    StaffView --> CheckInventory[Check current stock]
+    CheckInventory --> CheckNeeds[Identify items to restock]
+
+    CheckNeeds --> PrepareSupplies[Prepare supplies]
+    PrepareSupplies --> SupplySource{Supply source?}
+
+    SupplySource -->|Available| TakeFromStock[Take from stock]
+    SupplySource -->|Purchase| PurchaseNeeded[Need to purchase]
+
+    PurchaseNeeded --> GetApproval[Request budget approval]
+    GetApproval --> AdminApprove{Admin approves?}
+    AdminApprove -->|No| ReportIssue[Cannot restock]
+    AdminApprove -->|Yes| GoShop[Purchase supplies]
+    GoShop --> TakeFromStock
+
+    TakeFromStock --> GPSCheckIn[GPS Check-in]
+    GPSCheckIn --> PhotoBefore[Take BEFORE photos]
+    PhotoBefore --> StartRestock[Start restock]
+
+    StartRestock --> ItemByItem[Restock item by item]
+    ItemByItem --> CountItem[Count quantity added]
+    CountItem --> PhotoItem[Take item photo]
+    PhotoItem --> LogStockIn[Log stock-in]
+
+    LogStockIn --> MoreItems{More items?}
+    MoreItems -->|Yes| ItemByItem
+    MoreItems -->|No| PhotoAfter[Take AFTER photo]
+
+    PhotoAfter --> OrganizeStorage[Organize storage]
+    OrganizeStorage --> UpdateSystem[Update inventory system]
+
+    UpdateSystem --> NewStock[Calculate new current stock]
+    NewStock --> CheckPar{Meets par level?}
+
+    CheckPar -->|No| AlertStillLow[Still low alert]
+    AlertStillLow --> AdminNotify[Notify Admin]
+
+    CheckPar -->|Yes| GPSCheckOut[GPS Check-out]
+    AlertStillLow --> GPSCheckOut
+
+    GPSCheckOut --> SubmitTask[Submit task]
+    SubmitTask --> AdminReview[Admin review]
+
+    AdminReview --> Verified[Task verified]
+    Verified --> UpdatePropertyStatus[Update property inventory status]
+    UpdatePropertyStatus --> ClearAlert[Clear shortage alert]
+    ClearAlert --> LogHistory[Log inventory history]
+    LogHistory --> CalcCost[Calculate cost]
+    CalcCost --> GenReport[Generate inventory report]
+    GenReport --> End([Complete])
+
+    style Start fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+    style Verified fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style End fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+      </div>
+    </div>
+
+    <!-- Laundry Workflow -->
+    <div id="laundry" class="flowchart-container">
+      <h2 class="flowchart-title">👕 Laundry Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('laundry')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-laundry" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Close the laundry loop (pick-up → wash/dry → drop-off) with counts, quality, and restock.</p>
+<h3>👥 Actors</h3>
+<ul><li>Laundry Staff</li><li>Admin</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Guest check-out</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>Pick-up: count/inspect → GPS → photos → deduct inventory.</li>
+<li>Wash: sort → wash/dry → QC → submit.</li>
+<li>Drop-off: deliver → reconcile counts → restock → submit.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul><li>Mismatch on delivery vs pick-up → shortage log & notify admin.</li></ul>
+<h3>🗃️ Data Captured</h3>
+<ul><li>Counts in/out</li><li>QC photos</li><li>Inventory movements</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>Loss rate</li><li>Rewash rate</li><li>Turnaround time</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Guest Check-out]) --> CreateTask[System creates Laundry tasks]
+    CreateTask --> TaskTypes[Three tasks: Pick-up / Wash / Drop-off]
+
+    TaskTypes --> PickupTask[Task 1: Pick-up]
+    PickupTask --> AssignLaundry[Assign to Laundry staff]
+    AssignLaundry --> NotifyStaff[Notify staff]
+    NotifyStaff --> StaffView[Staff views task]
+
+    StaffView --> GPSCheckIn1[GPS Check-in]
+    GPSCheckIn1 --> PhotoBefore1[Take BEFORE photos]
+    PhotoBefore1 --> StartCount[Count linens]
+
+    StartCount --> CountSheets[Count bed sheets by size]
+    CountSheets --> CountTowels[Count towels by type]
+    CountTowels --> CountOthers[Count blankets, pillowcases]
+
+    CountOthers --> InspectCondition[Inspect condition]
+    InspectCondition --> FoundIssue{Any issue?}
+
+    FoundIssue -->|Stained| LogStained[Log stained linens]
+    FoundIssue -->|Damaged| LogDamaged[Log damaged with photos]
+    FoundIssue -->|Missing| LogMissing[Log missing linens]
+    FoundIssue -->|All good| PhotoPacked
+
+    LogStained --> PhotoPacked[Take photo: packed linens]
+    LogDamaged --> PhotoPacked
+    LogMissing --> PhotoPacked
+
+    PhotoPacked --> UpdateInventory1[Deduct inventory]
+    UpdateInventory1 --> GPSCheckOut1[GPS Check-out]
+    GPSCheckOut1 --> SubmitPickup[Submit Pick-up task]
+
+    SubmitPickup --> TransportFacility[Transport to facility]
+    TransportFacility --> WashTask[Task 2: Wash and Dry]
+
+    WashTask --> SortLinens[Sort linens]
+    SortLinens --> SortByColor[By color]
+    SortByColor --> SortByFabric[By fabric]
+
+    SortByFabric --> PhotoBatches[Photo batches]
+    PhotoBatches --> StartWash[Start washing]
+
+    StartWash --> WashCycle[Wash cycle]
+    WashCycle --> CheckStains{Stains remain?}
+    CheckStains -->|Yes| SpotTreat[Spot treatment]
+    SpotTreat --> WashCycle
+
+    CheckStains -->|No| DryCycle[Dry cycle]
+    DryCycle --> FoldLinens[Fold linens]
+    FoldLinens --> QualityCheck[Quality check]
+
+    QualityCheck --> IssueFound2{Issue found?}
+    IssueFound2 -->|Yes| ReworkBatch[Rewash batch]
+    ReworkBatch --> WashCycle
+
+    IssueFound2 -->|No| PhotoClean[Photo clean linens]
+    PhotoClean --> SubmitWash[Submit Wash task]
+
+    SubmitWash --> PrepareDelivery[Prepare delivery]
+    PrepareDelivery --> DropoffTask[Task 3: Drop-off and Restock]
+
+    DropoffTask --> LoadVehicle[Load linens]
+    LoadVehicle --> GPSCheckIn2[GPS Check-in]
+    GPSCheckIn2 --> CountDelivery[Count delivered linens]
+
+    CountDelivery --> ComparePickup{Matches Pick-up count?}
+
+    ComparePickup -->|No| LogShortage[Log shortage]
+    LogShortage --> NotifyShortage[Notify Admin]
+
+    ComparePickup -->|Yes| ArrangeStorage[Organize storage]
+    NotifyShortage --> ArrangeStorage
+
+    ArrangeStorage --> PhotoArranged[Photo organized storage]
+    PhotoArranged --> UpdateInventory2[Update inventory]
+    UpdateInventory2 --> CheckStock{Meets par level?}
+
+    CheckStock -->|No| CreateRestockTask[Create restock task]
+    CheckStock -->|Yes| GPSCheckOut2[GPS Check-out]
+    CreateRestockTask --> GPSCheckOut2
+
+    GPSCheckOut2 --> SubmitDropoff[Submit Drop-off task]
+    SubmitDropoff --> AdminReview[Admin reviews all tasks]
+
+    AdminReview --> AllApproved{All approved?}
+    AllApproved -->|No| RequestFix[Request corrections]
+    AllApproved -->|Yes| CompleteCycle[Cycle completed]
+
+    CompleteCycle --> UpdateStats[Update statistics]
+    UpdateStats --> GenReport[Generate laundry report]
+    GenReport --> End([Complete])
+
+    style Start fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+    style CompleteCycle fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style End fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+      </div>
+    </div>
+
+    <!-- Incident Handling -->
+    <div id="incident" class="flowchart-container">
+      <h2 class="flowchart-title">🚨 Emergency / Incident Handling</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('incident')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-incident" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Escalate and resolve emergencies with strict SLAs and multi-channel alerts.</p>
+<h3>👥 Actors</h3>
+<ul><li>Staff (reporter)</li><li>Admin / Backup Admin</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Emergency button/report</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>Submit incident (media, GPS) → notify (push/SMS/email) → admin acknowledges → assess → act (dispatch/guide/vendor) → verify fix → close incident → metrics.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul><li>No acknowledgement → auto-call; then escalate to backup.</li></ul>
+<h3>🗃️ Data Captured</h3>
+<ul><li>Media, GPS</li><li>Response times</li><li>Action logs</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>MTTA/MTTR</li><li>Acknowledgement within SLA</li><li>Post-incident actions</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Incident detected]) --> AssessIncident[Initial assessment]
+    AssessIncident --> IncidentType{Type?}
+
+    IncidentType -->|Emergency| Emergency[EMERGENCY]
+    IncidentType -->|Access issue| AccessIssue[ACCESS ISSUE]
+    IncidentType -->|Safety hazard| SafetyHazard[SAFETY HAZARD]
+    IncidentType -->|Equipment failure| EquipFail[EQUIPMENT FAILURE]
+    IncidentType -->|Other critical| OtherCritical[OTHER CRITICAL]
+
+    Emergency --> CallButton[Press URGENT ALERT]
+    AccessIssue --> CallButton
+    SafetyHazard --> CallButton
+    EquipFail --> CallButton
+    OtherCritical --> CallButton
+
+    CallButton --> SelectType[Select incident type]
+    SelectType --> PhotoVideo[Capture photos / video]
+    PhotoVideo --> RecordVoice[Record voice note]
+    RecordVoice --> WriteDesc[Write short description]
+    WriteDesc --> Submit[Submit]
+
+    Submit --> MultiChannel[Multi-channel notification]
+    MultiChannel --> PushNotif[Push notification to Admin]
+    MultiChannel --> SMSNotif[SMS to Admin]
+    MultiChannel --> EmailNotif[Email to Admin]
+
+    PushNotif --> AdminAlert[RED banner on Admin dashboard]
+    SMSNotif --> AdminAlert
+    EmailNotif --> AdminAlert
+
+    AdminAlert --> Start15minTimer[Start 15-minute timer]
+    Start15minTimer --> AdminSee{Admin acknowledged?}
+
+    AdminSee -->|No after 5 min| FirstCall[Auto-call Admin]
+    FirstCall --> AdminSee2{Admin answered?}
+    AdminSee2 -->|No after 10 min| EscalateBackup[Escalate to backup]
+    AdminSee2 -->|Yes| AdminAck
+
+    AdminSee -->|Yes| AdminAck[Admin acknowledges]
+    EscalateBackup --> AdminAck
+
+    AdminAck --> ViewDetails[View details]
+    ViewDetails --> CheckMedia[Review media]
+    CheckMedia --> CheckLocation[Review GPS location]
+    CheckLocation --> AssessSeverity[Assess severity]
+
+    AssessSeverity --> SetPriority{Priority level?}
+    SetPriority -->|P0 Critical| P0Action[Immediate actions]
+    SetPriority -->|P1 High| P1Action[Plan actions]
+    SetPriority -->|P2 Medium| P2Action[Plan actions]
+
+    P0Action --> ActionType{Action type?}
+    ActionType -->|Call staff| CallStaff[Call on-site staff]
+    ActionType -->|Dispatch team| DispatchTeam[Dispatch support team]
+    ActionType -->|Call vendor| CallVendor[Call external vendor]
+    ActionType -->|Remote guide| RemoteGuide[Remote guidance]
+
+    CallStaff --> GiveInstructions[Provide specific instructions]
+    DispatchTeam --> SendTeam[Team travels to site]
+    CallVendor --> VendorArrival[Vendor arrives]
+    RemoteGuide --> VideoCall[Video call with staff]
+
+    GiveInstructions --> StaffExecute[Staff executes]
+    SendTeam --> TeamOnSite[Team on-site]
+    VendorArrival --> VendorWork[Vendor works]
+    VideoCall --> GuidanceGiven[Guidance complete]
+
+    StaffExecute --> UpdateProgress[Update progress]
+    TeamOnSite --> UpdateProgress
+    VendorWork --> UpdateProgress
+    GuidanceGiven --> UpdateProgress
+
+    UpdateProgress --> PhotoProgress[Upload progress photos]
+    PhotoProgress --> AdminMonitor[Admin monitors in real time]
+
+    AdminMonitor --> IssueResolved{Resolved?}
+    IssueResolved -->|No| ContinueWork[Continue work]
+    ContinueWork --> UpdateProgress
+
+    IssueResolved -->|Yes| PhotoResolved[Upload resolved photo]
+    PhotoResolved --> TestSolution[Test solution]
+    TestSolution --> ConfirmWorking[Confirm working]
+
+    ConfirmWorking --> StaffReport[Staff final report]
+    StaffReport --> AdminVerify[Admin verifies]
+
+    AdminVerify --> VerifyOK{Verified OK?}
+    VerifyOK -->|No| AdditionalWork[Request additional work]
+    AdditionalWork --> UpdateProgress
+
+    VerifyOK -->|Yes| CloseIncident[Close incident]
+    CloseIncident --> CalcResTime[Calculate resolution time]
+    CalcResTime --> LogIncident[Log history]
+
+    LogIncident --> CheckPrevent{Preventable in future?}
+    CheckPrevent -->|Yes| ScheduleMaint[Schedule maintenance]
+    CheckPrevent -->|No| NotifyStake
+
+    ScheduleMaint --> NotifyStake[Notify stakeholders]
+    NotifyStake --> GenIncidentReport[Generate incident report]
+
+    GenIncidentReport --> UpdateMetrics[Update metrics]
+    UpdateMetrics --> CheckPattern[Check patterns]
+    CheckPattern --> End([Resolved])
+
+    PlanAction --> CreateWorkOrder[Create work order]
+    CreateWorkOrder --> AssignResource[Assign resources]
+    AssignResource --> SetTimeline[Set timeline]
+    SetTimeline --> GiveInstructions
+
+    style Start fill:#ff6b6b,stroke:#c92a2a,stroke-width:3px
+    style Emergency fill:#ff6b6b,stroke:#c92a2a,stroke-width:2px
+    style CloseIncident fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style End fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+      </div>
+    </div>
+
+    <!-- Admin Quality Check -->
+    <div id="qa" class="flowchart-container">
+      <h2 class="flowchart-title">✅ Admin Quality Check</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('qa')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-qa" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Manual quality gate to approve or return tasks with feedback.</p>
+<h3>👥 Actors</h3>
+<ul><li>Admin/QA</li><li>Staff</li></ul>
+<h3>✅ Happy Path</h3>
+<ul><li>Collect photos → review → approve or reject → track metrics.</li></ul>
+<h3>⚠️ Edge Cases</h3>
+<ul><li>Rejected tasks loop back to staff To-Do with reasons.</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>Rejection rate</li><li>Average review time</li><li>Compliance</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Photos submitted]) --> TriggerQA{Trigger QA?}
+
+    TriggerQA -->|After cleaning| CleaningPhotos[Cleaning task photos]
+    TriggerQA -->|After maintenance| MaintenancePhotos[Maintenance task photos]
+    TriggerQA -->|Manual request| ManualQA[Admin requested QA]
+
+    CleaningPhotos --> CollectPhotos[Collect all photos]
+    MaintenancePhotos --> CollectPhotos
+    ManualQA --> CollectPhotos
+
+    CollectPhotos --> AdminReview[Admin manual review]
+    AdminReview --> CheckQuality[Check quality]
+
+    CheckQuality --> QualityDecision{Quality OK?}
+    QualityDecision -->|Pass| Approve[Approve task]
+    QualityDecision -->|Fail| RejectTask[Reject and return]
+
+    Approve --> UpdateStatus[Update task status to APPROVED]
+    RejectTask --> NotifyStaff[Notify staff to redo]
+
+    NotifyStaff --> ReassignTask[Task returns to To-Do]
+    ReassignTask --> StaffRedo[Staff redoes work]
+    StaffRedo --> Start
+
+    UpdateStatus --> RecordMetrics[Record QA metrics]
+    RecordMetrics --> End([Done])
+      </div>
+    </div>
+
+    <!-- Lawn/Pool Workflow -->
+    <div id="lawnpool" class="flowchart-container">
+      <h2 class="flowchart-title">🌿 Lawn and Pool Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('lawnpool')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-lawnpool" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Standardize recurring lawn/pool services with proof and safety checks.</p>
+<h3>👥 Actors</h3>
+<ul><li>Vendors / Staff</li><li>Admin</li></ul>
+<h3>⏱️ Key Triggers</h3>
+<ul><li>Recurring schedule</li><li>One-time request</li></ul>
+<h3>✅ Happy Path</h3>
+<ul>
+<li>Schedule → GPS check-in → BEFORE photo → perform service (tasks vary) → AFTER photo → submit → approve.</li>
+</ul>
+<h3>⚠️ Edge Cases</h3>
+<ul><li>Weather or access issue → reschedule and notify.</li></ul>
+<h3>🗃️ Data Captured</h3>
+<ul><li>Photos (before/after)</li><li>Chemical logs (pool)</li><li>Time on site</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>On-time service</li><li>Quality audit pass</li><li>Chemical balance compliance</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Start]) -->TaskType{Task type?}
+
+    TaskType -->|Lawn care|LawnSchedule[Lawn schedule]
+    TaskType -->|Pool care|PoolSchedule[Pool schedule]
+
+    LawnSchedule --> LawnRecurring{Recurring?}
+    LawnRecurring -->|Yes| AutoGenLawn[Auto-generate by schedule]
+    LawnRecurring -->|No| ManualLawn[Admin creates one-time task]
+
+    AutoGenLawn --> AssignLawnVendor[Assign to Lawn Vendor]
+    ManualLawn --> AssignLawnVendor
+
+    PoolSchedule --> PoolRecurring{Recurring?}
+    PoolRecurring -->|Yes| AutoGenPool[Auto-generate by schedule]
+    PoolRecurring -->|No| ManualPool[Admin creates one-time task]
+
+    AutoGenPool --> AssignPoolVendor[Assign to Pool Vendor]
+    ManualPool --> AssignPoolVendor
+
+    AssignLawnVendor --> NotifyVendor1[Notify Lawn Vendor]
+    AssignPoolVendor --> NotifyVendor2[Notify Pool Vendor]
+
+    NotifyVendor1 --> VendorView[Vendor views details]
+    NotifyVendor2 --> VendorView
+
+    VendorView --> CheckProfile[Review property/profile]
+    CheckProfile --> PrepEquip[Prepare equipment]
+    PrepEquip --> CheckWeather{Weather OK?}
+
+    CheckWeather -->|No| Reschedule[Reschedule task]
+    Reschedule --> NotifyAdmin[Notify Admin]
+    NotifyAdmin --> VendorView
+
+    CheckWeather -->|Yes| GPSCheckIn[GPS Check-in]
+    GPSCheckIn --> VerifyLocation{Correct property?}
+    VerifyLocation -->|No| LocationError[GPS error]
+    LocationError --> ContactAdmin[Contact Admin]
+
+    VerifyLocation -->|Yes| AccessProperty{Access available?}
+    AccessProperty -->|No| AccessIssue[Access issue alert]
+    AccessIssue --> UrgentAlert[Urgent alert]
+
+    AccessProperty -->|Yes| PhotoBefore[Take BEFORE overview photo]
+    PhotoBefore --> ServiceType{Service type?}
+
+    ServiceType -->|Lawn| LawnService[Lawn service]
+    ServiceType -->|Pool| PoolService[Pool service]
+
+    LawnService --> LawnTasks[Lawn tasks]
+    LawnTasks --> Mowing{Need mowing?}
+    Mowing -->|Yes| DoMowing[Mow lawn]
+    Mowing -->|No| Edging
+    DoMowing --> Edging{Need edging?}
+
+    Edging -->|Yes| DoEdging[Edge trimming]
+    Edging -->|No| Trimming
+    DoEdging --> Trimming{Need trimming?}
+
+    Trimming -->|Yes| DoTrimming[Trim trees/shrubs]
+    Trimming -->|No| Fertilize
+    DoTrimming --> Fertilize{Need fertilizing?}
+
+    Fertilize -->|Yes| DoFertilize[Apply fertilizer]
+    Fertilize -->|No| Cleanup1
+    DoFertilize --> Cleanup1[Clean debris]
+
+    Cleanup1 --> PhotoAfterLawn[Take AFTER lawn photo]
+
+    PoolService --> PoolTasks[Pool tasks]
+    PoolTasks --> Skim[Skim debris]
+    Skim --> Brush[Brush pool]
+    Brush --> Vacuum[Vacuum bottom]
+    Vacuum --> TestWater[Test chemical levels]
+
+    TestWater --> RecordLevels[Record pH, chlorine, etc.]
+    RecordLevels --> ChemNeeded{Adjust chemicals?}
+
+    ChemNeeded -->|Yes| AddChem[Add chemicals]
+    AddChem --> LogChem[Log chemicals]
+    LogChem --> PhotoChem[Photo test strip]
+
+    ChemNeeded -->|No| CheckEquip[Check equipment]
+    PhotoChem --> CheckEquip
+
+    CheckEquip --> EquipIssue{Equipment OK?}
+    EquipIssue -->|No| ReportEquip[Report equipment issue]
+    ReportEquip --> PhotoEquip[Photo issue]
+
+    EquipIssue -->|Yes| PhotoAfterPool[Take AFTER pool photo]
+    PhotoEquip --> PhotoAfterPool
+
+    PhotoAfterLawn --> GPSCheckOut[GPS Check-out]
+    PhotoAfterPool --> GPSCheckOut
+
+    GPSCheckOut --> CalcTime[Calculate time on-site]
+    CalcTime --> ValidateTime{Time reasonable?}
+
+    ValidateTime -->|No| TimeAlert[Time anomaly alert]
+    TimeAlert --> AdminCheckTime[Admin checks]
+
+    ValidateTime -->|Yes| SubmitTask[Submit task]
+    AdminCheckTime --> SubmitTask
+
+    SubmitTask --> AdminReview[Admin review]
+    AdminReview --> CheckPhotos{Photos OK?}
+
+    CheckPhotos -->|No| RequestMore[Request more photos]
+    RequestMore --> VendorView
+
+    CheckPhotos -->|Yes| Approve[Approve task]
+    Approve --> LogService[Log service history]
+    LogService --> CheckNext{Next service scheduled?}
+
+    CheckNext -->|Yes| ScheduleNext[Confirm next service]
+    CheckNext -->|No| CompletedEnd
+
+    ScheduleNext --> CompletedEnd[Completed]
+    CompletedEnd --> UpdateProperty[Update status]
+    UpdateProperty --> GenReport[Generate report]
+    GenReport --> End([Complete])
+
+    style Start fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+    style CompletedEnd fill:#51cf66,stroke:#2f9e44,stroke-width:2px
+    style End fill:#51cf66,stroke:#2f9e44,stroke-width:3px
+      </div>
+    </div>
+
+    <!-- Reporting Workflow -->
+    <div id="reporting" class="flowchart-container">
+      <h2 class="flowchart-title">📊 Reporting Workflow</h2>
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('reporting')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-reporting" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Generate operational and executive reports across domains.</p>
+<h3>🧭 Scopes</h3>
+<ul><li>Cleaning, Maintenance, Inventory, Laundry, Lawn/Pool, Comprehensive</li></ul>
+<h3>📤 Outputs</h3>
+<ul><li>PDF/CSV/Excel</li><li>Charts: bar, line, pie, heat map</li></ul>
+<h3>🤖 Automation</h3>
+<ul><li>Scheduled runs</li><li>Email delivery</li><li>Dashboard updates</li></ul>
+<h3>📈 KPIs</h3>
+<ul><li>Completion rates</li><li>Average times</li><li>Quality scores</li><li>Cost analysis</li></ul>
+</div>
+    
+      <div class="mermaid">
+flowchart TD
+    Start([Start]) --> Trigger{Report trigger?}
+
+    Trigger -->|Scheduled| AutoReport[Scheduled report generation]
+    Trigger -->|On-demand| ManualReport[Admin requests report]
+    Trigger -->|End of period| PeriodReport[Period-end auto report]
+
+    AutoReport --> CheckSchedule[Check schedule configuration]
+    ManualReport --> SelectParams[Select parameters]
+    PeriodReport --> DefineScope[Define report scope]
+
+    SelectParams --> DateRange[Pick date range]
+    SelectParams --> SelectProps[Select properties]
+    SelectParams --> SelectMetrics[Select metrics]
+
+    DateRange --> DefineScope
+    SelectProps --> DefineScope
+    SelectMetrics --> DefineScope
+
+    DefineScope --> ReportCategory{Report category?}
+
+    ReportCategory -->|Cleaning| CleaningReport[Cleaning Report]
+    ReportCategory -->|Maintenance| MaintenanceReport[Maintenance Report]
+    ReportCategory -->|Inventory| InventoryReport[Inventory Report]
+    ReportCategory -->|Laundry| LaundryReport[Laundry Report]
+    ReportCategory -->|Lawn/Pool| LawnPoolReport[Lawn / Pool Report]
+    ReportCategory -->|Comprehensive| CompReport[Comprehensive Report]
+
+    CleaningReport --> QueryDB1[Query cleaning data]
+    QueryDB1 --> CollectTasks[Collect task data]
+    CollectTasks --> CollectPhotos[Collect photo records]
+    CollectPhotos --> CollectQA[Collect QA results]
+    CollectQA --> CollectIssues[Collect damage/loss reports]
+
+    MaintenanceReport --> QueryDB2[Query maintenance data]
+    QueryDB2 --> CollectMaintTasks[Collect maintenance tasks]
+    CollectMaintTasks --> CollectResTime[Collect resolution times]
+    CollectResTime --> CollectCosts[Collect cost data]
+
+    InventoryReport --> QueryDB3[Query inventory data]
+    QueryDB3 --> CollectStock[Collect stock levels]
+    CollectStock --> CollectTrans[Collect transactions]
+    CollectTrans --> CollectShortages[Collect shortage alerts]
+    CollectShortages --> CalcUsage[Calculate usage rates]
+
+    LaundryReport --> QueryDB4[Query laundry data]
+    QueryDB4 --> CollectLinens[Collect linen data]
+    CollectLinens --> CollectCounts[Collect in/out counts]
+    CollectCounts --> CollectDamages[Collect damage logs]
+
+    LawnPoolReport --> QueryDB5[Query lawn/pool data]
+    QueryDB5 --> CollectServices[Collect service records]
+    CollectServices --> CollectChem[Collect chemical logs]
+    CollectChem --> CollectVendor[Collect vendor performance]
+
+    CompReport --> QueryAll[Query all databases]
+    QueryAll --> AggregateAll[Aggregate all data]
+
+    CollectIssues --> ProcessData[Process and aggregate data]
+    CollectCosts --> ProcessData
+    CalcUsage --> ProcessData
+    CollectDamages --> ProcessData
+    CollectVendor --> ProcessData
+    AggregateAll --> ProcessData
+
+    ProcessData --> CalcMetrics[Calculate metrics]
+
+    CalcMetrics --> CompRate[Completion rates]
+    CalcMetrics --> AvgTime[Average times]
+    CalcMetrics --> QualityScore[Quality scores]
+    CalcMetrics --> CostAnalysis[Cost analysis]
+    CalcMetrics --> Trends[Trends]
+
+    CompRate --> GenCharts[Generate charts and graphs]
+    AvgTime --> GenCharts
+    QualityScore --> GenCharts
+    CostAnalysis --> GenCharts
+    Trends --> GenCharts
+
+    GenCharts --> BarCharts[Bar charts]
+    GenCharts --> LineGraphs[Line graphs]
+    GenCharts --> PieCharts[Pie charts]
+    GenCharts --> HeatMaps[Heat maps]
+
+    BarCharts --> FormatReport[Format report]
+    LineGraphs --> FormatReport
+    PieCharts --> FormatReport
+    HeatMaps --> FormatReport
+
+    FormatReport --> AddSummary[Executive summary]
+    AddSummary --> AddDetails[Detailed sections]
+    AddDetails --> AddRecommend[Recommendations]
+    AddRecommend --> AddAppendix[Appendix]
+
+    AddAppendix --> ExportFormat{Export format?}
+
+    ExportFormat -->|PDF| GenPDF[Generate PDF]
+    ExportFormat -->|CSV| GenCSV[Generate CSV]
+    ExportFormat -->|Excel| GenExcel[Generate Excel]
+    ExportFormat -->|All| GenAll[Generate all formats]
+
+    GenPDF --> AddBranding[Add company branding]
+    AddBranding --> AddLogo[Add logo]
+    AddLogo --> PageNumbers[Add page numbers]
+    PageNumbers --> TOC[Table of contents]
+    TOC --> SavePDF[Save PDF]
+
+    GenCSV --> StructureData[Structure data rows]
+    StructureData --> AddHeaders[Add headers]
+    AddHeaders --> SaveCSV[Save CSV]
+
+    GenExcel --> CreateSheets[Create sheets]
+    CreateSheets --> AddFormulas[Add formulas]
+    AddFormulas --> AddPivot[Add pivot tables]
+    AddPivot --> FormatCells[Format cells]
+    FormatCells --> SaveExcel[Save Excel]
+
+    GenAll --> SavePDF
+    GenAll --> SaveCSV
+    GenAll --> SaveExcel
+
+    SavePDF --> UploadCloud[Upload to cloud storage]
+    SaveCSV --> UploadCloud
+    SaveExcel --> UploadCloud
+
+    UploadCloud --> GenLinks[Generate download links]
+    GenLinks --> CheckRecipients{Recipients configured?}
+
+    CheckRecipients -->|Yes| SendEmail[Send email with reports]
+    CheckRecipients -->|No| NotifyAdmin[Notify Admin report ready]
+
+    SendEmail --> EmailAdmin[Email to Admin]
+    SendEmail --> EmailOwners[Email to Property Owners]
+    SendEmail --> EmailStake[Email to Stakeholders]
+
+    EmailAdmin --> LogDelivery[Log email delivery]
+    EmailOwners --> LogDelivery
+    EmailStake --> LogDelivery
+    NotifyAdmin --> LogDelivery
+
+    LogDelivery --> SaveRecord[Save report record to DB]
+    SaveRecord --> UpdateLastGen[Update last generated date]
+    UpdateLastGen --> ScheduleNext{Auto-schedule next?}
+
+    ScheduleNext -->|Yes| CalcNext[Calculate next run date]
+    ScheduleNext -->|No| Complete
+    CalcNext --> SetReminder[Set reminder]
+    SetReminder --> Complete[Report generation complete]
+
+    Complete --> ArchiveReport[Archive to report history]
+    ArchiveReport --> UpdateDash[Update dashboard metrics]
+    UpdateDash --> End([Done])
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      function initMermaid(){
+        if (window.mermaid && typeof mermaid.initialize === 'function'){
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            flowchart: { useMaxWidth: true, htmlLabels: false, curve:'linear', nodeSpacing: 70, rankSpacing: 70, defaultRenderer: 'elk' }
+          });
+        }
+      }
+      if (window.mermaid) {
+        initMermaid();
+        // render only the visible (active) tab, because ELK needs layout size
+        const active = document.querySelector('.flowchart-container.active .mermaid');
+        if (active){
+          active.setAttribute('data-graph-index', '1');
+          mermaid.run({ querySelector: '.flowchart-container.active .mermaid' }).catch(err=>{
+            const msg = (err && (err.message || err.str)) ? (err.message || err.str) : JSON.stringify(err);
+            const pre = document.createElement('pre');
+            pre.className = 'error-box';
+            pre.textContent = `Mermaid render error (active diagram):\n` + msg;
+            active.replaceWith(pre);
+          });
+        }
+      } else {
+        const s = document.querySelector('script[src*="mermaid"]');
+        if (s) s.addEventListener('load', initMermaid);
+      }
+
+      window.showFlowchart = function(id, event){
+
+      
+      window.toggleDetails = function(flowId){
+        const el = document.getElementById('details-' + flowId);
+        if (!el) return;
+        const visible = el.style.display === 'block';
+        el.style.display = visible ? 'none' : 'block';
+        // Update button label with icon
+        const btn = document.querySelector('#' + flowId + ' .flow-toolbar .btn.primary');
+        if (btn) btn.innerHTML = visible ? 'ℹ️ Xem mô tả' : '▲ Ẩn mô tả';
+      }
+
+
+
+        document.querySelectorAll('.flowchart-container').forEach(c=>c.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+        if (event && event.target) event.target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Render active diagram only
+        const active = el.querySelector('.mermaid');
+        if (window.mermaid && active){
+          // Render only when tab becomes visible
+          mermaid.run({ querySelector: '.flowchart-container.active .mermaid' }).catch(err=>{
+            const msg = (err && (err.message || err.str)) ? (err.message || err.str) : JSON.stringify(err);
+            const pre = document.createElement('pre');
+            pre.className = 'error-box';
+            pre.textContent = `Mermaid render error (active diagram):\n` + msg;
+            active.replaceWith(pre);
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+    <!-- Calendar & Status -->
+    <div id="calendar" class="flowchart-container">
+      <h2 class="flowchart-title">📅 Calendar & Status</h2>
+      
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('calendar')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-calendar" class="details" aria-hidden="true">
+<h3>🎯 Mục tiêu</h3>
+<p>Hợp nhất lịch làm việc toàn hệ thống (Cleaning/Maintenance/Inventory/Laundry/Lawn–Pool) và trực quan hoá trạng thái để điều phối khối lượng công việc hiệu quả.</p>
+
+<h3>📌 Phạm vi áp dụng</h3>
+<ul>
+  <li>Admin/Manager theo dõi & điều phối; Nhân sự xem lịch cá nhân và đội.</li>
+  <li>Áp dụng cho cả lịch định kỳ (recurring) và lịch phát sinh.</li>
+</ul>
+
+<h3>🧭 Quy ước trạng thái</h3>
+<ul>
+  <li><b>Pending</b> → <b>In Progress</b> → <b>Completed</b> → <b>Verified</b></li>
+  <li>Nhánh nghẽn: <b>Blocked</b> → <b>Waiting parts</b> → quay lại <b>In Progress</b></li>
+  <li><b>Rework</b> quay về <b>In Progress</b>; có nhánh <b>Cancelled</b> khi cần.</li>
+</ul>
+
+<h3>⏱️ SLA & cảnh báo</h3>
+<ul>
+  <li>Cảnh báo quá hạn (overdue), sớm/ muộn bất thường, xung đột nhân sự/địa điểm.</li>
+  <li>Hiển thị <b>workload</b> & <b>SLA hints</b> ngay trên ô lịch.</li>
+</ul>
+
+<h3>🗓️ Chức năng lịch</h3>
+<ul>
+  <li>Chế độ xem: <b>Day / Week / Month</b>; filter theo <b>property</b>, <b>đội nhóm</b>, <b>role</b>.</li>
+  <li><b>Drag & drop</b> để dời thời gian; <b>Assign/Reassign</b> bằng thao tác kéo/thả.</li>
+  <li>Hiển thị <b>workload overlay</b> theo người/đội để cân bằng tải.</li>
+  <li>Click vào task để mở chi tiết/ảnh/checklist và thao tác nhanh (Approve/Request rework).</li>
+</ul>
+
+<h3>🧩 Tác vụ điển hình</h3>
+<ul>
+  <li><b>Điều phối nhanh:</b> kéo một Maintenance trùng lịch sang slot trống, hệ thống tự notify người liên quan.</li>
+  <li><b>Tối ưu tải:</b> xem workload tuần & dàn đều task giữa các nhân sự.</li>
+  <li><b>Giữ SLA:</b> lọc các task gần tới hạn, ưu tiên dời/assign trước.</li>
+</ul>
+
+<h3>🗃️ Dữ liệu ghi nhận</h3>
+<ul>
+  <li>Slot thời gian, người phụ trách, property, loại nghiệp vụ, trạng thái, lịch sử thay đổi.</li>
+  <li>Log thao tác kéo/thả và phê duyệt để phục vụ audit.</li>
+</ul>
+
+<h3>🔐 Quyền truy cập</h3>
+<ul>
+  <li>Admin: full control; được kéo/thả, assign, approve.</li>
+  <li>Nhân sự: xem lịch cá nhân/đội; thao tác giới hạn theo role.</li>
+</ul>
+
+<h3>📈 KPI gợi ý</h3>
+<ul>
+  <li>Tỷ lệ đúng hạn (on-time rate), cân bằng tải, SLA compliance theo tuần/tháng.</li>
+</ul>
+</div>
+    
+      <div id="details-calendar" class="details" aria-hidden="true">
+<h3>🎯 Mục tiêu</h3>
+<p>Hợp nhất lịch làm việc toàn hệ thống (Cleaning/Maintenance/Inventory/Laundry/Lawn–Pool) và trực quan hoá trạng thái để điều phối khối lượng công việc hiệu quả.</p>
+
+<h3>📌 Phạm vi áp dụng</h3>
+<ul>
+  <li>Admin/Manager theo dõi & điều phối; Nhân sự xem lịch cá nhân và đội.</li>
+  <li>Áp dụng cho cả lịch định kỳ (recurring) và lịch phát sinh.</li>
+</ul>
+
+<h3>🧭 Quy ước trạng thái</h3>
+<ul>
+  <li><b>Pending</b> → <b>In Progress</b> → <b>Completed</b> → <b>Verified</b></li>
+  <li>Nhánh nghẽn: <b>Blocked</b> → <b>Waiting parts</b> → quay lại <b>In Progress</b></li>
+  <li><b>Rework</b> quay về <b>In Progress</b>; có nhánh <b>Cancelled</b> khi cần.</li>
+</ul>
+
+<h3>⏱️ SLA & cảnh báo</h3>
+<ul>
+  <li>Cảnh báo quá hạn (overdue), sớm/ muộn bất thường, xung đột nhân sự/địa điểm.</li>
+  <li>Hiển thị <b>workload</b> & <b>SLA hints</b> ngay trên ô lịch.</li>
+</ul>
+
+<h3>🗓️ Chức năng lịch</h3>
+<ul>
+  <li>Chế độ xem: <b>Day / Week / Month</b>; filter theo <b>property</b>, <b>đội nhóm</b>, <b>role</b>.</li>
+  <li><b>Drag & drop</b> để dời thời gian; <b>Assign/Reassign</b> bằng thao tác kéo/thả.</li>
+  <li>Hiển thị <b>workload overlay</b> theo người/đội để cân bằng tải.</li>
+  <li>Click vào task để mở chi tiết/ảnh/checklist và thao tác nhanh (Approve/Request rework).</li>
+</ul>
+
+<h3>🧩 Tác vụ điển hình</h3>
+<ul>
+  <li><b>Điều phối nhanh:</b> kéo một Maintenance trùng lịch sang slot trống, hệ thống tự notify người liên quan.</li>
+  <li><b>Tối ưu tải:</b> xem workload tuần & dàn đều task giữa các nhân sự.</li>
+  <li><b>Giữ SLA:</b> lọc các task gần tới hạn, ưu tiên dời/assign trước.</li>
+</ul>
+
+<h3>🗃️ Dữ liệu ghi nhận</h3>
+<ul>
+  <li>Slot thời gian, người phụ trách, property, loại nghiệp vụ, trạng thái, lịch sử thay đổi.</li>
+  <li>Log thao tác kéo/thả và phê duyệt để phục vụ audit.</li>
+</ul>
+
+<h3>🔐 Quyền truy cập</h3>
+<ul>
+  <li>Admin: full control; được kéo/thả, assign, approve.</li>
+  <li>Nhân sự: xem lịch cá nhân/đội; thao tác giới hạn theo role.</li>
+</ul>
+
+<h3>📈 KPI gợi ý</h3>
+<ul>
+  <li>Tỷ lệ đúng hạn (on-time rate), cân bằng tải, SLA compliance theo tuần/tháng.</li>
+</ul>
+</div>
+
+      <div class="mermaid">
+flowchart TD
+    A([Open calendar]) --> B[Select view]
+    B --> C[Filter by property or team]
+    C --> D[Show workload overlay]
+    D --> E[Pick a task]
+    E --> F[Drag to new slot]
+    E --> G[Reassign to person]
+    F --> H[Update schedule]
+    G --> H
+    H --> I[Notify assignees]
+</div>
+      <div class="mermaid">
+flowchart LR
+    P([Pending]) --> I([In Progress])
+    I --> C([Completed])
+    C --> V([Verified])
+    I --> Bk([Blocked])
+    Bk --> Wp([Waiting parts])
+    Wp --> I
+    C --> R([Rework])
+    R --> I
+    P --> X([Cancelled])
+</div>
+
+    </div>
+
+    <!-- Chat -->
+    <div id="chat" class="flowchart-container">
+      <h2 class="flowchart-title">💬 Chat</h2>
+      
+      <div class="flow-toolbar">
+        <button class="btn primary" onclick="toggleDetails('chat')">ℹ️ Xem mô tả</button>
+      </div>
+      <div id="details-chat" class="details" aria-hidden="true">
+<h3>🎯 Mục tiêu</h3>
+<p>Tập trung trao đổi theo <b>Property</b> và <b>Task</b>, gắn hội thoại với nghiệp vụ để truy vết đầy đủ.</p>
+
+<h3>🏗️ Cấu trúc hội thoại</h3>
+<ul>
+  <li><b>Property thread</b>: kênh chung cho toàn bộ công việc tại một property.</li>
+  <li><b>Task thread</b>: nhánh con cho từng task (Cleaning/Maintenance/…)</li>
+</ul>
+
+<h3>💬 Luồng chính</h3>
+<ul>
+  <li>Mở thread → gửi tin/ảnh/video/voice → @mention người liên quan → tất cả nhận thông báo.</li>
+  <li>Từ chat có thể <b>mở chi tiết task</b> (deep link) hoặc <b>tạo task mới</b> (nếu có quyền).</li>
+</ul>
+
+<h3>🧩 Tính năng</h3>
+<ul>
+  <li>Text, ảnh, video, voice note; xem trước (preview) ngay trong app.</li>
+  <li>@mentions, read receipts, reaction; tìm kiếm theo từ khoá/property/task.</li>
+  <li>Đính kèm media đẩy vào hồ sơ task (ảnh chứng từ, hiện trường…).</li>
+</ul>
+
+<h3>⚠️ Ngoại lệ & Escalation</h3>
+<ul>
+  <li>Không nhận phản hồi trong khung giờ định nghĩa → <b>escalate</b> lên Admin.</li>
+</ul>
+
+<h3>🗃️ Lưu trữ & tuân thủ</h3>
+<ul>
+  <li>Lưu message + metadata (thời gian, người gửi, liên kết task/property).</li>
+  <li>Cho phép trích xuất hội thoại theo case phục vụ báo cáo/điều tra.</li>
+</ul>
+
+<h3>🔐 Quyền</h3>
+<ul>
+  <li>Admin xem tất cả; nhân sự xem theo property & task được phân công.</li>
+</ul>
+
+<h3>📈 KPI gợi ý</h3>
+<ul>
+  <li>Thời gian phản hồi trung bình, số lần escalate, % hội thoại gắn với task.</li>
+</ul>
+</div>
+    
+      <div id="details-chat" class="details" aria-hidden="true">
+<h3>🎯 Mục tiêu</h3>
+<p>Tập trung trao đổi theo <b>Property</b> và <b>Task</b>, gắn hội thoại với nghiệp vụ để truy vết đầy đủ.</p>
+
+<h3>🏗️ Cấu trúc hội thoại</h3>
+<ul>
+  <li><b>Property thread</b>: kênh chung cho toàn bộ công việc tại một property.</li>
+  <li><b>Task thread</b>: nhánh con cho từng task (Cleaning/Maintenance/…)</li>
+</ul>
+
+<h3>💬 Luồng chính</h3>
+<ul>
+  <li>Mở thread → gửi tin/ảnh/video/voice → @mention người liên quan → tất cả nhận thông báo.</li>
+  <li>Từ chat có thể <b>mở chi tiết task</b> (deep link) hoặc <b>tạo task mới</b> (nếu có quyền).</li>
+</ul>
+
+<h3>🧩 Tính năng</h3>
+<ul>
+  <li>Text, ảnh, video, voice note; xem trước (preview) ngay trong app.</li>
+  <li>@mentions, read receipts, reaction; tìm kiếm theo từ khoá/property/task.</li>
+  <li>Đính kèm media đẩy vào hồ sơ task (ảnh chứng từ, hiện trường…).</li>
+</ul>
+
+<h3>⚠️ Ngoại lệ & Escalation</h3>
+<ul>
+  <li>Không nhận phản hồi trong khung giờ định nghĩa → <b>escalate</b> lên Admin.</li>
+</ul>
+
+<h3>🗃️ Lưu trữ & tuân thủ</h3>
+<ul>
+  <li>Lưu message + metadata (thời gian, người gửi, liên kết task/property).</li>
+  <li>Cho phép trích xuất hội thoại theo case phục vụ báo cáo/điều tra.</li>
+</ul>
+
+<h3>🔐 Quyền</h3>
+<ul>
+  <li>Admin xem tất cả; nhân sự xem theo property & task được phân công.</li>
+</ul>
+
+<h3>📈 KPI gợi ý</h3>
+<ul>
+  <li>Thời gian phản hồi trung bình, số lần escalate, % hội thoại gắn với task.</li>
+</ul>
+</div>
+
+      <div class="mermaid">
+flowchart TD
+    A([Open chat]) --> B[Choose property thread]
+    B --> C[Open task thread]
+    C --> D[Post message or media]
+    D --> E[Notify participants]
+    E --> F[Reply and discuss]
+    F --> G[Link to task details]
+    G --> H[Resolve or escalate]
+</div>
+
+    </div>
+
+    
+    <!-- Roles & Permissions (Embedded Matrix) -->
+    <div id="roles" class="flowchart-container">
+      <h2 class="flowchart-title">🔐 Roles & Permissions</h2>
+      <div class="flow-toolbar" style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+        <button class="btn primary" onclick="toggleDetails('roles')">ℹ️ Xem mô tả</button>
+        <a class="btn" href="aristay_permission_matrix.html" target="_blank" rel="noopener">🔗 Open full page</a>
+        <button class="btn" onclick="(function(){ const f=document.getElementById('roles-embed'); if(f) f.src=f.src; })()">⟳ Reload</button>
+      </div>
+      <div id="details-roles" class="details" aria-hidden="true">
+        <h3>🎯 Purpose</h3>
+        <p>Display the full Roles & Permissions matrix exactly as designed in the standalone page.</p>
+        <h3>📝 Notes</h3>
+        <ul>
+          <li>The embedded view below mirrors the separate matrix page 1:1.</li>
+          <li>Use <strong>Open full page</strong> for a dedicated window and better printing.</li>
+        </ul>
+      </div>
+      <div class="embed-wrap" style="height:80vh;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#fff">
+        <iframe id="roles-embed" src="aristay_permission_matrix.html" style="width:100%;height:100%;border:0" title="Roles & Permissions Matrix"></iframe>
+      </div>
+    </div>
+
+<div id="details-roles" class="details" aria-hidden="true"></div>
+    
+      <div id="details-roles" class="details" aria-hidden="true">
+<h3>🎯 Purpose</h3>
+<p>Define who can do what in the system to ensure safety and accountability.</p>
+<h3>👥 Roles</h3>
+<ul><li>Admin</li><li>Cleaning</li><li>Maintenance</li><li>Laundry</li><li>Vendors</li><li>Owner (read only)</li></ul>
+<h3>📜 Notes</h3>
+<ul>
+<li>Least privilege principle</li>
+<li>Audit trail on approvals and status changes</li>
+</ul>
+</div>
+
+      <div class="mermaid">
+flowchart TB
+    subgraph Admin
+      A1[Manage schedule]
+      A2[Assign tasks]
+      A3[Approve or reject]
+      A4[View reports]
+      A5[Manage roles]
+    end
+    subgraph Cleaning
+      C1[View tasks]
+      C2[GPS check in out]
+      C3[Photos and checklists]
+    end
+    subgraph Maintenance
+      M1[View or claim tasks]
+      M2[Use parts log]
+      M3[Notes and photos]
+    end
+    subgraph Laundry
+      L1[Pick up Wash Drop off]
+      L2[Counts and quality]
+    end
+    subgraph Vendor
+      V1[Service tasks]
+      V2[Photos and notes]
+    end
+    subgraph Owner
+      O1[View reports]
+      O2[Read only property]
+    end
+</div>
+
+    </div>
+
