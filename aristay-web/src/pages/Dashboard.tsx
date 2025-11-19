@@ -1,98 +1,81 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { taskService } from '../services/task.service';
-import { Navbar } from '../components/Navbar';
+import React from 'react';
 
-export const Dashboard = () => {
-  const [filters, setFilters] = useState({ status: 'Pending', type: '' });
+// Sample data for tasks
+const tasks = [
+  { id: 1, title: 'Vệ sinh căn hộ 101', type: 'Cleaning', user: 'Nhân viên A', property: 'Chung cư A', status: 'pending', date: '2024-07-30' },
+  { id: 2, title: 'Sửa điều hòa phòng 202', type: 'Maintenance', user: 'Nhân viên B', property: 'Chung cư B', status: 'in-progress', date: '2024-07-30' },
+  { id: 3, title: 'Kiểm kho vật tư', type: 'Inventory', user: 'Nhân viên C', property: 'Kho chính', status: 'completed', date: '2024-07-29' },
+  { id: 4, title: 'Giặt ủi lô ga giường', type: 'Laundry', user: 'Đối tác X', property: 'Xưởng giặt', status: 'pending', date: '2024-07-30' },
+  { id: 5, title: 'Cắt cỏ sân vườn', type: 'Lawn-Pool', user: 'Nhân viên D', property: 'Biệt thự Vườn Tùng', status: 'pending', date: '2024-07-31' },
+];
 
-  const { data: tasks = [], isLoading } = useQuery({
-    queryKey: ['tasks', filters],
-    queryFn: () => taskService.getTasks(filters),
-  });
+const TaskCard = ({ task }: { task: typeof tasks[0] }) => {
+    const statusClasses: { [key: string]: string } = {
+        pending: 'bg-yellow-200 border-yellow-500',
+        'in-progress': 'bg-blue-200 border-blue-500',
+        completed: 'bg-green-200 border-green-500',
+    };
 
-  const statusColors: Record<string, string> = {
-    'Pending': 'bg-yellow-100 text-yellow-700',
-    'InProgress': 'bg-blue-100 text-blue-700',
-    'Completed': 'bg-green-100 text-green-700',
-    'Cancelled': 'bg-red-100 text-red-700',
-    'Overdue': 'bg-orange-100 text-orange-700',
-  };
+    const typeClasses: { [key: string]: string } = {
+        Cleaning: 'text-blue-800',
+        Maintenance: 'text-red-800',
+        Inventory: 'text-purple-800',
+        Laundry: 'text-indigo-800',
+        'Lawn-Pool': 'text-green-800',
+    }
 
-  const typeColors: Record<string, string> = {
-    'Cleaning': 'bg-purple-100 text-purple-700',
-    'Maintenance': 'bg-red-100 text-red-700',
-    'Laundry': 'bg-blue-100 text-blue-700',
-    'LawnPool': 'bg-green-100 text-green-700',
-    'ToDo': 'bg-gray-100 text-gray-700',
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
-      
-      <div className="max-w-7xl mx-auto p-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Dashboard</h1>
-
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Tasks</h2>
-
-          <div className="mb-4 flex gap-4">
-            <select
-              value={filters.status}
-              onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
-              <option value="">All Status</option>
-              <option value="Pending">Pending</option>
-              <option value="InProgress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
-
-            <select
-              value={filters.type}
-              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
-              <option value="">All Types</option>
-              <option value="Cleaning">Cleaning</option>
-              <option value="Maintenance">Maintenance</option>
-              <option value="Laundry">Laundry</option>
-              <option value="LawnPool">Lawn/Pool</option>
-            </select>
-          </div>
-
-          {isLoading ? (
-            <p className="text-gray-600">Loading tasks...</p>
-          ) : tasks.length === 0 ? (
-            <p className="text-gray-600">No tasks found</p>
-          ) : (
-            <div className="space-y-4">
-              {tasks.map((task) => (
-                <div key={task.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg">{task.title}</h3>
-                    <div className="flex gap-2">
-                      <span className={`text-xs px-3 py-1 rounded-full ${statusColors[task.status] || 'bg-gray-100'}`}>
-                        {task.status}
-                      </span>
-                      <span className={`text-xs px-3 py-1 rounded-full ${typeColors[task.type] || 'bg-gray-100'}`}>
-                        {task.type}
-                      </span>
-                    </div>
-                  </div>
-                  {task.description && (
-                    <p className="text-gray-600 text-sm mb-2">{task.description}</p>
-                  )}
-                  {task.due_date && (
-                    <p className="text-xs text-gray-500">Due: {new Date(task.due_date).toLocaleDateString()}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+    return (
+        <div className={`p-3 mb-3 rounded-lg border-l-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow ${statusClasses[task.status]}`}>
+            <h4 className="font-bold text-sm">{task.title}</h4>
+            <p className={`text-xs font-semibold ${typeClasses[task.type]}`}>{task.type} @ {task.property}</p>
+            <p className="text-xs text-gray-600 mt-1">Phụ trách: {task.user}</p>
         </div>
+    );
+};
+
+
+const CalendarDay = ({ day, date, tasks }: { day: string, date: string, tasks: typeof tasks }) => {
+    return (
+        <div className="flex-1 border border-gray-200 rounded-lg p-3 bg-gray-50">
+            <h3 className="font-bold text-center mb-4">{day} <span className="text-gray-500 font-normal">{date}</span></h3>
+            <div className="h-full">
+                {tasks.map(task => <TaskCard key={task.id} task={task} />)}
+            </div>
+        </div>
+    )
+}
+
+const Dashboard: React.FC = () => {
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Bảng điều phối công việc</h1>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
+            <span>Chờ thực hiện</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-blue-400 rounded-full"></div>
+            <span>Đang tiến hành</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-green-400 rounded-full"></div>
+            <span>Hoàn thành</span>
+          </div>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            + Tạo công việc mới
+          </button>
+        </div>
+      </div>
+
+      <div className="flex space-x-4">
+        <CalendarDay day="Thứ Hai" date="29/07" tasks={tasks.filter(t => t.date === '2024-07-29')} />
+        <CalendarDay day="Thứ Ba" date="30/07" tasks={tasks.filter(t => t.date === '2024-07-30')} />
+        <CalendarDay day="Thứ Tư" date="31/07" tasks={tasks.filter(t => t.date === '2024-07-31')} />
       </div>
     </div>
   );
 };
+
+export default Dashboard;

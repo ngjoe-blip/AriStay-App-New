@@ -1,48 +1,51 @@
-import { useAuthStore } from '../store/auth.store';
-import { useNavigate, Link } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/auth.store";
 
-export const Navbar = () => {
-  const { user, logout } = useAuthStore();
+const Navbar = () => {
   const navigate = useNavigate();
+  const { logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
+  const navLinkClasses = (
+    { isActive }: { isActive: boolean })
+     => `flex items-center px-4 py-3 text-gray-200 hover:bg-gray-700 rounded-lg transition-colors ${
+      isActive ? "bg-gray-700 font-bold" : ""
+    }`;
+
   return (
-    <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
-            <h1 className="text-2xl font-bold text-primary-600">AriStay</h1>
-            <div className="hidden md:flex space-x-6">
-              <Link to="/dashboard" className="text-gray-700 hover:text-primary-600 transition">Dashboard</Link>
-              <Link to="/properties" className="text-gray-700 hover:text-primary-600 transition">Properties</Link>
-              <Link to="/incidents" className="text-gray-700 hover:text-primary-600 transition">Incidents</Link>
-              <Link to="/inventory" className="text-gray-700 hover:text-primary-600 transition">Inventory</Link>
-              <Link to="/laundry" className="text-gray-700 hover:text-primary-600 transition">Laundry</Link>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            {user && (
-              <>
-                <span className="text-sm text-gray-700">{user.full_name}</span>
-                <span className="text-xs bg-primary-100 text-primary-700 px-3 py-1 rounded-full">
-                  {user.role}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+    <div className="w-64 bg-gray-800 text-white flex flex-col p-4">
+      <div className="text-2xl font-bold mb-10 text-center">AriStay</div>
+      <nav className="flex flex-col space-y-3">
+        <NavLink to="/" className={navLinkClasses}>
+          Bảng điều khiển
+        </NavLink>
+        <NavLink to="/properties" className={navLinkClasses}>
+          Bất động sản
+        </NavLink>
+        <NavLink to="/incidents" className={navLinkClasses}>
+          Sự cố
+        </NavLink>
+        <NavLink to="/inventory" className={navLinkClasses}>
+          Kho
+        </NavLink>
+        <NavLink to="/laundry" className={navLinkClasses}>
+          Giặt ủi
+        </NavLink>
+      </nav>
+      <div className="mt-auto">
+        <button 
+          onClick={handleLogout} 
+          className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+        >
+          Đăng xuất
+        </button>
       </div>
-    </nav>
+    </div>
   );
 };
+
+export default Navbar;

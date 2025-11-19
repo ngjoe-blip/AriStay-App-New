@@ -1,81 +1,67 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 
-export const Login = () => {
+const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const { login } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuthStore();
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
     try {
+      // Replace with your actual login logic
       await login(email, password);
-      navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
-    } finally {
-      setLoading(false);
+      navigate('/');
+    } catch (err) {
+      setError('Invalid email or password');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-xl p-8">
-        <h1 className="text-3xl font-bold text-center text-primary-600 mb-8">AriStay</h1>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-800">Welcome to AriStay</h1>
+          <p className="mt-2 text-gray-600">Đăng nhập để quản lý công việc của bạn</p>
+        </div>
+        <form className="space-y-6" onSubmit={handleLogin}>
+          <div className="relative">
+            <input 
+              type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required
+              placeholder="Email" 
+              className="w-full px-4 py-3 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-shadow"
+              required 
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
+          <div className="relative">
+            <input 
+              type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              placeholder="Mật khẩu" 
+              className="w-full px-4 py-3 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-shadow"
               required
             />
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <div>
+            <button type="submit" className="w-full px-4 py-3 font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors">
+              Đăng nhập
+            </button>
+          </div>
         </form>
-
-        <p className="text-center text-gray-600 mt-6">
-          Don't have an account?{' '}
-          <a href="/register" className="text-primary-600 hover:underline font-medium">
-            Register
-          </a>
+        <p className="text-center text-gray-600">
+          Chưa có tài khoản?{' '}
+          <a href="/register" className="font-medium text-blue-600 hover:underline">Đăng ký</a>
         </p>
       </div>
     </div>
   );
 };
+
+export default Login;
