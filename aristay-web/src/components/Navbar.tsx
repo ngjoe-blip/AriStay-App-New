@@ -10,9 +10,8 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const navLinkClasses = (
-    { isActive }: { isActive: boolean })
-     => `flex items-center px-4 py-3 text-gray-200 hover:bg-gray-700 rounded-lg transition-colors ${
+  const navLinkClasses = ({ isActive }: { isActive: boolean }) => 
+    `flex items-center px-4 py-3 text-gray-200 hover:bg-gray-700 rounded-lg transition-colors ${
       isActive ? "bg-gray-700 font-bold" : ""
     }`;
 
